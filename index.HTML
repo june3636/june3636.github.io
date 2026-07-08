@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #87CEEB;
+            font-family: sans-serif;
+            margin: 1000;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #0047AB;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            opacity: 0.8;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            aspect-ratio: 800 / 700;
+            min-height: 500px;
+        }
+
+        .title {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 64px;
+            font-weight: bold;
+            color: #0047AB;
+        }
+
+        .mint-circle {
+            position: absolute;
+            top: 120px;
+            left: 30px;
+            width: 200px;
+            height: 200px;
+            background-color: #98FF98;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .mint-circle p {
+            color: #001a4d;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .white-circle {
+            position: absolute;
+            top: 330px;
+            left: 100px;
+            width: 200px;
+            height: 200px;
+            background-color: #FFD700;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .white-circle p {
+            color: #001a4d;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .light-green-circle {
+            position: absolute;
+            top: 150px;
+            right: 80px;
+            width: 140px;
+            height: 140px;
+            background-color: #90EE90;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 15px;
+            z-index: 10;
+        }
+
+        .light-green-circle p {
+            color: #001a4d;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .yellow-circle {
+            position: absolute;
+            bottom: 220px;
+            right: 80px;
+            width: 160px;
+            height: 160px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .yellow-circle p {
+            color: #001a4d;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .stars {
+            display: flex;
+            gap: 5px;
+            font-size: 24px;
+        }
+
+        .star {
+            color: #FFD700;
+        }
+
+        .mint-circle, .white-circle, .light-green-circle, .yellow-circle {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .game-selector {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .game-selector.active {
+            display: flex;
+        }
+
+        .game-menu {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .game-menu h2 {
+            color: #0047AB;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .game-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .game-btn {
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .game-btn.bounce {
+            background-color: #90EE90;
+            color: #001a4d;
+        }
+
+        .game-btn.bounce:hover {
+            background-color: #6FD76F;
+            transform: scale(1.05);
+        }
+
+        .game-btn.monster {
+            background-color: #FFD700;
+            color: #001a4d;
+        }
+
+        .game-btn.monster:hover {
+            background-color: #FFC700;
+            transform: scale(1.05);
+        }
+
+        #gameArea {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #87CEEB;
+            z-index: 999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #gameArea.active {
+            display: flex;
+        }
+
+        #gameCanvas {
+            border: 3px solid #0047AB;
+            background-color: white;
+        }
+
+        .game-info {
+            color: #0047AB;
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .game-controls {
+            color: #001a4d;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background-color: #0047AB;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            z-index: 1001;
+        }
+
+        .back-btn:hover {
+            background-color: #002d7a;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 12px 15px;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+            nav {
+                display: none;
+                position: absolute;
+                top: 55px;
+                left: 0;
+                right: 0;
+                background-color: #0047AB;
+                flex-direction: column;
+                gap: 10px;
+                padding: 15px;
+                z-index: 100;
+            }
+
+            nav.active {
+                display: flex;
+            }
+
+            .menu-btn {
+                display: block;
+            }
+
+            main {
+                padding: 10px;
+            }
+
+            .container {
+                min-height: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 18px;
+            }
+
+            nav a {
+                font-size: 14px;
+            }
+
+            main {
+                padding: 5px;
+            }
+
+            .container {
+                min-height: 250px;
+            }
+        }
+    </style>
+    <script>
+        let gameRunning = false;
+        let currentGame = null;
+
+        function toggleMenu() {
+            const navMenu = document.getElementById('nav-menu');
+            navMenu.classList.toggle('active');
+        }
+
+        // 메뉴 항목 클릭시 메뉴 닫기
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('nav a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    document.getElementById('nav-menu').classList.remove('active');
+                });
+            });
+        });
+
+        function swapPositions(circle1, circle2) {
+            const temp1 = {
+                top: circle1.style.top,
+                left: circle1.style.left,
+                right: circle1.style.right,
+                bottom: circle1.style.bottom,
+                position: circle1.style.position
+            };
+
+            circle1.style.top = circle2.style.top;
+            circle1.style.left = circle2.style.left;
+            circle1.style.right = circle2.style.right;
+            circle1.style.bottom = circle2.style.bottom;
+            circle1.style.position = circle2.style.position;
+
+            circle2.style.top = temp1.top;
+            circle2.style.left = temp1.left;
+            circle2.style.right = temp1.right;
+            circle2.style.bottom = temp1.bottom;
+            circle2.style.position = temp1.position;
+        }
+
+        function showGameSelector() {
+            document.getElementById('gameSelector').classList.add('active');
+        }
+
+        function closeGame() {
+            document.getElementById('gameArea').classList.remove('active');
+            document.getElementById('gameSelector').classList.remove('active');
+            gameRunning = false;
+            if (currentGame) {
+                currentGame.stop();
+            }
+        }
+
+        function startGame(gameType) {
+            document.getElementById('gameSelector').classList.remove('active');
+            document.getElementById('gameArea').classList.add('active');
+            gameRunning = true;
+            currentGame = gameType === 'bounce' ? new BounceBallGame() : new MonsterAvoidGame();
+            currentGame.start();
+        }
+
+        // Bounce Ball Game
+        class BounceBallGame {
+            constructor() {
+                this.canvas = document.getElementById('gameCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.canvas.width = 600;
+                this.canvas.height = 400;
+
+                this.level = 1;
+                this.mousex = 300;
+                this.mousey = 200;
+
+                this.ball = {
+                    x: 300,
+                    y: 200,
+                    radius: 10,
+                    speed: 2
+                };
+
+                this.goal = {
+                    x: 550,
+                    y: 350,
+                    width: 40,
+                    height: 40,
+                    vx: 2,
+                    vy: 2
+                };
+
+                this.obstacles = [
+                    { x: 100, y: 100, width: 80, height: 20 },
+                    { x: 400, y: 150, width: 20, height: 100 },
+                    { x: 200, y: 300, width: 100, height: 20 }
+                ];
+
+                this.animationId = null;
+                this.setupMouseTracking();
+            }
+
+            setupMouseTracking() {
+                this.canvas.addEventListener('mousemove', (e) => {
+                    const rect = this.canvas.getBoundingClientRect();
+                    this.mousex = e.clientX - rect.left;
+                    this.mousey = e.clientY - rect.top;
+                });
+            }
+
+            start() {
+                this.updateLevel();
+                this.animate();
+            }
+
+            updateLevel() {
+                this.updateInfo(`바운스볼 게임 - Level ${this.level}`, 'Level ' + this.level + ': 마우스를 움직여 공을 골인지점에 넣으세요! 빨간 벽을 피하세요!');
+            }
+
+            animate = () => {
+                this.ctx.fillStyle = 'white';
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+                // Draw level
+                this.ctx.fillStyle = '#0047AB';
+                this.ctx.font = '20px Arial';
+                this.ctx.fillText(`Level: ${this.level}`, 10, 30);
+
+                // Draw obstacles
+                this.ctx.fillStyle = '#FF6B6B';
+                this.obstacles.forEach(obs => {
+                    this.ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+                });
+
+                // Move goal
+                this.goal.x += this.goal.vx;
+                this.goal.y += this.goal.vy;
+
+                if (this.goal.x < 0 || this.goal.x + this.goal.width > this.canvas.width) {
+                    this.goal.vx *= -1;
+                }
+                if (this.goal.y < 0 || this.goal.y + this.goal.height > this.canvas.height) {
+                    this.goal.vy *= -1;
+                }
+
+                // Draw goal
+                this.ctx.fillStyle = '#0047AB';
+                this.ctx.fillRect(this.goal.x, this.goal.y, this.goal.width, this.goal.height);
+
+                // Draw ball
+                this.ctx.fillStyle = '#FFD700';
+                this.ctx.beginPath();
+                this.ctx.arc(this.ball.x, this.ball.y, this.ball.radius, 0, Math.PI * 2);
+                this.ctx.fill();
+
+                // Move ball towards mouse
+                const dx = this.mousex - this.ball.x;
+                const dy = this.mousey - this.ball.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance > 0) {
+                    this.ball.x += (dx / distance) * this.ball.speed;
+                    this.ball.y += (dy / distance) * this.ball.speed;
+                }
+
+                // Check collision with obstacles
+                for (let obs of this.obstacles) {
+                    if (this.ball.x > obs.x && this.ball.x < obs.x + obs.width &&
+                        this.ball.y > obs.y && this.ball.y < obs.y + obs.height) {
+                        alert('게임 오버! 벽에 닿았습니다!');
+                        closeGame();
+                        return;
+                    }
+                }
+
+                // Check if ball reaches goal
+                if (this.ball.x > this.goal.x && this.ball.x < this.goal.x + this.goal.width &&
+                    this.ball.y > this.goal.y && this.ball.y < this.goal.y + this.goal.height) {
+                    this.level++;
+                    if (this.level > 5) {
+                        alert('모든 레벨을 완료했습니다! 축하합니다!');
+                        closeGame();
+                        return;
+                    }
+                    // 다음 레벨 설정
+                    this.ball.speed += 0.3;
+                    this.ball.x = 300;
+                    this.ball.y = 200;
+                    this.goal.vx += 0.5;
+                    this.goal.vy += 0.5;
+                    this.updateLevel();
+                }
+
+                if (gameRunning && currentGame === this) {
+                    this.animationId = requestAnimationFrame(this.animate);
+                }
+            }
+
+            updateInfo(title, desc) {
+                document.querySelector('.game-info').textContent = title;
+                document.querySelector('.game-controls').textContent = desc;
+            }
+
+            stop() {
+                if (this.animationId) {
+                    cancelAnimationFrame(this.animationId);
+                }
+            }
+        }
+
+        // Monster Avoid Game
+        class MonsterAvoidGame {
+            constructor() {
+                this.canvas = document.getElementById('gameCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.canvas.width = 600;
+                this.canvas.height = 400;
+
+                this.level = 1;
+
+                this.player = {
+                    x: 300,
+                    y: 350,
+                    width: 30,
+                    height: 30,
+                    speed: 5
+                };
+
+                this.goal = {
+                    x: 275,
+                    y: 20,
+                    width: 50,
+                    height: 30
+                };
+
+                this.safeZones = [
+                    { x: 50, y: 50, width: 80, height: 80 },
+                    { x: 470, y: 200, width: 80, height: 80 }
+                ];
+
+                this.walls = [
+                    { x: 150, y: 150, width: 20, height: 100 },
+                    { x: 430, y: 120, width: 20, height: 120 }
+                ];
+
+                this.monsters = [];
+                this.pills = [];
+                this.projectiles = [];
+                this.boss = null;
+                this.isBossLevel = false;
+                this.pillsCollected = 0;
+                this.keys = {};
+                this.animationId = null;
+                this.initMonsters();
+                this.initPills();
+                this.setupControls();
+            }
+
+            initMonsters() {
+                this.monsters = [];
+                this.isBossLevel = this.level % 5 === 0;
+
+                if (this.isBossLevel) {
+                    // 보스 생성
+                    this.boss = {
+                        x: 300,
+                        y: 100,
+                        width: 60,
+                        height: 60,
+                        health: 5 + Math.floor(this.level / 5) * 2,
+                        maxHealth: 5 + Math.floor(this.level / 5) * 2
+                    };
+                } else {
+                    // 일반 몬스터 생성
+                    const monsterCount = 2 + Math.floor(this.level / 2);
+                    for (let i = 0; i < monsterCount; i++) {
+                        this.monsters.push({
+                            x: Math.random() * (this.canvas.width - 40),
+                            y: Math.random() * (this.canvas.height / 2),
+                            width: 40,
+                            height: 40,
+                            dx: 1 + this.level * 0.2,
+                            dy: 1 + this.level * 0.2
+                        });
+                    }
+                }
+            }
+
+            initPills() {
+                this.pills = [];
+                const pillCount = 8 + Math.floor(this.level / 2) * 2;
+                for (let i = 0; i < pillCount; i++) {
+                    this.pills.push({
+                        x: Math.random() * (this.canvas.width - 20),
+                        y: Math.random() * (this.canvas.height - 100) + 50,
+                        width: 15,
+                        height: 15
+                    });
+                }
+            }
+
+            setupControls() {
+                this.keydownHandler = (e) => {
+                    this.keys[e.key] = true;
+                    if ((e.key === ' ' || e.code === 'Space') && this.isBossLevel) {
+                        e.preventDefault();
+                        this.shootProjectile();
+                    }
+                };
+                this.keyupHandler = (e) => {
+                    this.keys[e.key] = false;
+                };
+                window.addEventListener('keydown', this.keydownHandler);
+                window.addEventListener('keyup', this.keyupHandler);
+            }
+
+            shootProjectile() {
+                if (this.pillsCollected > 0 && this.isBossLevel) {
+                    this.projectiles.push({
+                        x: this.player.x + this.player.width / 2 - 5,
+                        y: this.player.y - 10,
+                        width: 10,
+                        height: 10,
+                        speed: 8
+                    });
+                    this.pillsCollected--;
+                    console.log('발사! 남은 알약:', this.pillsCollected);
+                }
+            }
+
+            start() {
+                this.updateLevel();
+                this.animate();
+            }
+
+            updateLevel() {
+                if (this.isBossLevel) {
+                    this.updateInfo(`몬스터 피하기 - Level ${this.level} (보스!)`, `Level ${this.level}: 알약을 먹고 보스를 공격하세요! 스페이스바로 발사!`);
+                } else {
+                    this.updateInfo(`몬스터 피하기 - Level ${this.level}`, `Level ${this.level}: 화살표 키로 이동, 몬스터를 피하고 안전지대를 활용하세요!`);
+                }
+            }
+
+            animate = () => {
+                if (!gameRunning || currentGame !== this) {
+                    return;
+                }
+
+                this.ctx.fillStyle = 'white';
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+                // Draw level
+                this.ctx.fillStyle = '#0047AB';
+                this.ctx.font = '20px Arial';
+                this.ctx.fillText(`Level: ${this.level}`, 10, 30);
+
+                // Draw safe zones
+                this.ctx.fillStyle = 'rgba(144, 238, 144, 0.3)';
+                this.safeZones.forEach(zone => {
+                    this.ctx.fillRect(zone.x, zone.y, zone.width, zone.height);
+                    this.ctx.strokeStyle = '#90EE90';
+                    this.ctx.lineWidth = 2;
+                    this.ctx.strokeRect(zone.x, zone.y, zone.width, zone.height);
+                });
+
+                // Draw walls
+                this.ctx.fillStyle = '#333333';
+                this.walls.forEach(wall => {
+                    this.ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
+                });
+
+                // Handle player movement
+                if (this.keys['ArrowLeft'] && this.player.x > 0) this.player.x -= this.player.speed;
+                if (this.keys['ArrowRight'] && this.player.x < this.canvas.width - this.player.width) this.player.x += this.player.speed;
+                if (this.keys['ArrowUp'] && this.player.y > 0) this.player.y -= this.player.speed;
+                if (this.keys['ArrowDown'] && this.player.y < this.canvas.height - this.player.height) this.player.y += this.player.speed;
+
+                // Check wall collision
+                for (let wall of this.walls) {
+                    if (this.checkCollision(this.player, wall)) {
+                        // Revert movement
+                        if (this.keys['ArrowLeft']) this.player.x += this.player.speed;
+                        if (this.keys['ArrowRight']) this.player.x -= this.player.speed;
+                        if (this.keys['ArrowUp']) this.player.y += this.player.speed;
+                        if (this.keys['ArrowDown']) this.player.y -= this.player.speed;
+                    }
+                }
+
+                // Draw goal
+                this.ctx.fillStyle = '#0047AB';
+                this.ctx.fillRect(this.goal.x, this.goal.y, this.goal.width, this.goal.height);
+
+                // Draw player
+                this.ctx.fillStyle = '#FFD700';
+                this.ctx.fillRect(this.player.x, this.player.y, this.player.width, this.player.height);
+
+                let levelCompleted = false;
+
+                if (this.isBossLevel) {
+                    // 보스 레벨 처리
+                    // Draw pills
+                    this.ctx.fillStyle = '#FF1493';
+                    for (let i = this.pills.length - 1; i >= 0; i--) {
+                        const pill = this.pills[i];
+                        this.ctx.fillRect(pill.x, pill.y, pill.width, pill.height);
+
+                        if (this.checkCollision(this.player, pill)) {
+                            this.pillsCollected++;
+                            this.pills.splice(i, 1);
+                        }
+                    }
+
+                    // Draw projectiles and check collisions
+                    this.ctx.fillStyle = '#FFD700';
+                    for (let i = this.projectiles.length - 1; i >= 0; i--) {
+                        const proj = this.projectiles[i];
+                        proj.y -= proj.speed;
+                        this.ctx.fillRect(proj.x, proj.y, proj.width, proj.height);
+
+                        // 보스와 충돌 확인
+                        if (proj.x < this.boss.x + this.boss.width &&
+                            proj.x + proj.width > this.boss.x &&
+                            proj.y < this.boss.y + this.boss.height &&
+                            proj.y + proj.height > this.boss.y) {
+                            this.boss.health--;
+                            this.projectiles.splice(i, 1);
+                            console.log('보스 맞음! 남은 체력:', this.boss.health);
+                        } else if (proj.y < 0) {
+                            this.projectiles.splice(i, 1);
+                        }
+                    }
+
+                    // Draw boss
+                    this.ctx.fillStyle = '#FF00FF';
+                    this.ctx.fillRect(this.boss.x, this.boss.y, this.boss.width, this.boss.height);
+
+                    // Boss health bar
+                    this.ctx.fillStyle = '#FF0000';
+                    const healthWidth = (this.boss.health / this.boss.maxHealth) * this.boss.width;
+                    this.ctx.fillRect(this.boss.x, this.boss.y - 20, healthWidth, 10);
+                    this.ctx.strokeStyle = '#000000';
+                    this.ctx.lineWidth = 2;
+                    this.ctx.strokeRect(this.boss.x, this.boss.y - 20, this.boss.width, 10);
+
+                    // 보스 추적
+                    const dx = this.player.x - this.boss.x;
+                    const dy = this.player.y - this.boss.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance > 0) {
+                        this.boss.x += (dx / distance) * (0.5 + this.level * 0.1);
+                        this.boss.y += (dy / distance) * (0.5 + this.level * 0.1);
+                    }
+
+                    // 보스 처치 확인
+                    if (this.boss && this.boss.health <= 0) {
+                        alert('보스를 처치했습니다! 다음 레벨로 진행합니다!');
+                        levelCompleted = true;
+                    } else {
+                        // 보스와 플레이어 충돌 확인
+                        if (this.boss) {
+                            let inSafeZone = false;
+                            for (let zone of this.safeZones) {
+                                if (this.checkCollision(this.player, zone)) {
+                                    inSafeZone = true;
+                                    break;
+                                }
+                            }
+
+                            if (!inSafeZone && this.checkCollision(this.player, this.boss)) {
+                                alert('게임 오버! 보스에게 맞았습니다!');
+                                closeGame();
+                                return;
+                            }
+                        }
+                    }
+
+                    // 알약 개수 표시
+                    this.ctx.fillStyle = '#000000';
+                    this.ctx.font = '16px Arial';
+                    this.ctx.fillText(`알약: ${this.pillsCollected}`, 10, 60);
+                } else {
+                    // 일반 몬스터 처리
+                    // Update and draw monsters
+                    this.monsters.forEach(monster => {
+                        // 플레이어를 추적하는 유도탄 행동
+                        const dx = this.player.x - monster.x;
+                        const dy = this.player.y - monster.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+
+                        if (distance > 0) {
+                            monster.x += (dx / distance) * (1 + this.level * 0.2);
+                            monster.y += (dy / distance) * (1 + this.level * 0.2);
+                        }
+
+                        // 벽으로 충돌 회피
+                        for (let wall of this.walls) {
+                            if (this.checkCollision(monster, wall)) {
+                                monster.x += monster.dx * 2;
+                                monster.y += monster.dy * 2;
+                            }
+                        }
+
+                        this.ctx.fillStyle = '#FF6B6B';
+                        this.ctx.fillRect(monster.x, monster.y, monster.width, monster.height);
+
+                        // 안전지대 제외하고 충돌 확인
+                        let inSafeZone = false;
+                        for (let zone of this.safeZones) {
+                            if (this.checkCollision(this.player, zone)) {
+                                inSafeZone = true;
+                                break;
+                            }
+                        }
+
+                        if (!inSafeZone && this.checkCollision(this.player, monster)) {
+                            alert('게임 오버! 몬스터에 맞았습니다!');
+                            closeGame();
+                            return;
+                        }
+                    });
+
+                    // Check if player reaches goal
+                    if (this.checkCollision(this.player, this.goal)) {
+                        levelCompleted = true;
+                    }
+                }
+
+                // 레벨 완료 처리
+                if (levelCompleted) {
+                    this.nextLevel();
+                }
+
+                this.animationId = requestAnimationFrame(this.animate);
+            }
+
+            checkCollision(rect1, rect2) {
+                return rect1.x < rect2.x + rect2.width &&
+                       rect1.x + rect1.width > rect2.x &&
+                       rect1.y < rect2.y + rect2.height &&
+                       rect1.y + rect1.height > rect2.y;
+            }
+
+            nextLevel() {
+                this.level++;
+                if (this.level > 10) {
+                    alert('모든 레벨을 완료했습니다! 축하합니다!');
+                    closeGame();
+                    return;
+                }
+                // 다음 레벨 설정
+                this.player.speed += 0.2;
+                this.player.x = 300;
+                this.player.y = 350;
+                this.pillsCollected = 0;
+                this.projectiles = [];
+                this.monsters = [];
+                this.pills = [];
+                this.boss = null;
+                this.initMonsters();
+                this.initPills();
+                this.updateLevel();
+            }
+
+            updateInfo(title, desc) {
+                document.querySelector('.game-info').textContent = title;
+                document.querySelector('.game-controls').textContent = desc;
+            }
+
+            stop() {
+                if (this.animationId) {
+                    cancelAnimationFrame(this.animationId);
+                }
+                if (this.keydownHandler) {
+                    window.removeEventListener('keydown', this.keydownHandler);
+                }
+                if (this.keyupHandler) {
+                    window.removeEventListener('keyup', this.keyupHandler);
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const circles = document.querySelectorAll('.mint-circle, .white-circle, .light-green-circle, .yellow-circle');
+            circles.forEach(circle => {
+                circle.addEventListener('click', function(e) {
+                    e.stopPropagation();
+
+                    const otherCircles = Array.from(circles).filter(c => c !== this);
+                    const randomIndex = Math.floor(Math.random() * otherCircles.length);
+                    const randomCircle = otherCircles[randomIndex];
+
+                    swapPositions(this, randomCircle);
+                });
+            });
+
+            // Game selector setup
+            const mintCircle = document.querySelector('.mint-circle');
+            mintCircle.addEventListener('dblclick', showGameSelector);
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <div class="logo">DLAB</div>
+        <button class="menu-btn" onclick="toggleMenu()">☰</button>
+        <nav id="nav-menu">
+            <a href="#game">게임</a>
+            <a href="#about">소개</a>
+        </nav>
+    </header>
+
+    <main>
+    <div class="container">
+        <div class="title">DLAB</div>
+
+        <div class="mint-circle">
+            <p>코딩을 하는<br>학원</p>
+        </div>
+
+        <div class="white-circle">
+            <p>코인으로<br>물건을 살수있다.</p>
+        </div>
+
+        <div class="light-green-circle">
+            <p>학원비<br>50만원</p>
+        </div>
+
+        <div class="yellow-circle">
+            <p>별점</p>
+            <div class="stars">
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star">★</span>
+            </div>
+        </div>
+    </div>
+    </main>
+
+    <div id="gameSelector" class="game-selector">
+        <div class="game-menu">
+            <h2>미니게임 선택</h2>
+            <div class="game-buttons">
+                <button class="game-btn bounce" onclick="startGame('bounce')">🎾 바운스볼</button>
+                <button class="game-btn monster" onclick="startGame('monster')">👹 몬스터 피하기</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="gameArea" class="game-area">
+        <button class="back-btn" onclick="closeGame()">← 돌아가기</button>
+        <canvas id="gameCanvas"></canvas>
+        <div class="game-info"></div>
+        <div class="game-controls"></div>
+    </div>
+</body>
+</html>
