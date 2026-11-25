@@ -10,10 +10,7 @@ portfolio/
 ├── style.css              # 스타일시트 (레트로 게임 디자인)
 ├── game.js                # 게임 로직 및 인터랙션
 ├── stages.json            # 프로젝트 5개 정보 (수정은 여기서만)
-├── README.md              # 이 파일
-└── assets/
-    ├── screenshots/       # 스크린샷 (stage1.png ~ stage5.png)
-    └── sounds/           # 효과음 (선택사항)
+└── README.md              # 이 파일
 ```
 
 ## 주요 기능
@@ -137,10 +134,6 @@ git push -u origin main
 `style.css`에서 font-family 값 수정
 
 ## 문제 해결
-
-### 스크린샷이 안 보일 때
-- 파일 경로 확인: `assets/screenshots/stage1.png` 등
-- 파일명이 정확한지 확인
 
 ### Streamlit 앱이 느릴 때
 - Streamlit 무료 서버는 처음 접속 시 1분 정도 걸릴 수 있음
